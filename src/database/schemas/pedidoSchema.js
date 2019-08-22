@@ -25,8 +25,15 @@ const platilloSchema = new schema({
     enum:['Tarjeta', 'Efectivo'],
   },
   detalle:  [{
-    type: schema.Types.ObjectId,
-    ref: 'detalle'
+    restaurante: {
+      type: String,
+    },
+    platillo: {
+      type: String,
+    },
+    cantidad: {
+      type: String
+    }
   }]
 }, { timestamps: true });
 
