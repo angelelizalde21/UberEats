@@ -3,7 +3,6 @@ import { gql } from 'apollo-server';
 const typeDefs = gql`
  
   type Usuario {
-    clave: String
     nombre: String
     email: String
     password: String
@@ -14,7 +13,6 @@ const typeDefs = gql`
   }
 
   type Repartidor {
-    clave: String
     nombre: String
     email: String
     password: String
@@ -24,47 +22,56 @@ const typeDefs = gql`
   }
 
   type Restaurante {
-    clave: String
+    _id: ID
     nombre: String
     direccion: String
     avatar: String
     tiempoEspera: String
+    platillos: [Platillo]
   }
 
   type Categoria {
-    clave: String
+    _id: ID
     nombre: String
     imagen: String
   }
 
   type Platillo {
-    clave: String
-    restaurate: String
+    _id: ID
+    restauranteID: ID
     nombre: String
     descripcion: String
     imagen: String
     precio: String
-    categoria: String
+    categoriaID: ID
   }
 
   type Pedido {
-    folio: String
-    usuario: String
-    repartidor: String
-    total: Int
+    _id: ID
+    usuarioID: ID
+    repartidorID: ID
+    total: Float
     metodoPago: String
     detalle: [Detalle]
   }
 
   type Detalle {
-    restaurante: String
-    platillo: String
+    restauranteID: ID
+    platilloID: ID
     cantidad: Int
   }
 
 
   input UsuarioInput {
-    clave: String
+    nombre: String
+    email: String
+    password: String
+    genero: String
+    avatar: String
+    ubicacion: String
+  }
+
+  input RepartidorInput {
     nombre: String
     email: String
     password: String
@@ -74,7 +81,6 @@ const typeDefs = gql`
   }
 
   input RestauranteInput {
-    clave: String
     nombre: String
     direccion: String
     avatar: String
@@ -82,34 +88,31 @@ const typeDefs = gql`
   }
 
   input CategoriaInput {
-    clave: String
     nombre: String
     imagen: String
   }
 
   input PlatilloInput {
-    clave: String
-    restaurate: String
+    restauranteID: ID
     nombre: String
     descripcion: String
     imagen: String
     precio: String
-    categoria: String
+    categoriaID: ID
   }
 
   input PedidoInput {
-    folio: String
-    usuario: String
-    repartidor: String
-    total: Int
+    usuarioID: ID
+    repartidorID: ID
+    total: Float
     metodoPago: String
     detalle: [DetalleInput]
   } 
 
   input DetalleInput {
-    restaurante: String
-    platillo: String
-    cantidad: Int
+    restauranteID: ID
+    platilloID: ID
+    cantidad: Float
   }
  
   type Query {
@@ -124,11 +127,23 @@ const typeDefs = gql`
 
   type Mutation {
     addUsuario(data: UsuarioInput) : Usuario
-    addRepartidor(data: UsuarioInput) : Repartidor
+    updateUsuario(data: UsuarioInput, usuarioID: ID) : Usuario
+    deleteUsuario(usuarioID: ID) : Usuario
+    addRepartidor(data: RepartidorInput) : Repartidor
+    updateRepartidor(data: RepartidorInput, repartidorID: ID) : Repartidor
+    deleteRepartidor(repartidorID: ID) : Repartidor
     addRestaurante(data: RestauranteInput) : Restaurante
+    updateRestaurante(data: RestauranteInput, restauranteID: ID) : Restaurante
+    deleteRestaurante(restauranteID: ID) : Restaurante
     addCategoria(data: CategoriaInput) : Categoria
-    addPlatillo(data: PlatilloInput) : Platillo
+    updateCategoria(data: CategoriaInput, categoriaID: ID) : Categoria
+    deleteCategoria(categoriaID: ID) : Categoria
+    addPlatillo(data: PlatilloInput, restauranteID: ID) : Platillo
+    updatePlatillo(data: PlatilloInput, platilloID: ID) : Platillo
+    deletePlatillo(platilloID: ID) : Platillo
     addPedido(data: PedidoInput) : Pedido
+    updatePedido(data: PedidoInput, pedidoID: ID) : Pedido
+    deletePedido(pedidoID: ID) : Pedido
   }
 `;
 

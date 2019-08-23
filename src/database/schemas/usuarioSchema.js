@@ -3,10 +3,6 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const usuarioSchema = new schema({
-  clave: {
-    type: String,
-    required: true,
-  },
   nombre: {
     type: String,
     required: true,

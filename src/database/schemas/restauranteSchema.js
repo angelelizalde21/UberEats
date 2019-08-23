@@ -3,10 +3,6 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const restauranteSchema = new schema({
-  clave: {
-    type: String,
-    required: true,
-  },
   nombre: {
     type: String,
     required: true,
@@ -23,6 +19,10 @@ const restauranteSchema = new schema({
     type: String,
     required: true,
   },
+  platillos: [{
+    type: schema.Types.ObjectId,
+    ref: 'platillos'
+  }]
 }, { timestamps: true });
 
 mongoose.Types.ObjectId.prototype.valueOf = function () {
