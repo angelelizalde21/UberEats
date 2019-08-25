@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 
 import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers';
+import { getContext, AuthDirective } from './actions/authActions';
 
 require('dotenv').config();
 
@@ -27,7 +28,14 @@ mongoDB.on('open', () => console.log('BD conectada !!'));
 
 // GraphQL
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  schemaDirectives: {
+    AuthDirective: AuthDirective
+  },
+  context: async ({ req }) => getContext(req),
+});
 
 server.listen({ port: process.env.PORT }).then(({ url }) => {
   console.log('server is ready at ' + url);

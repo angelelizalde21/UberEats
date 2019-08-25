@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const schema = mongoose.Schema;
 
@@ -17,7 +18,7 @@ const usuarioSchema = new schema({
   },
   genero: {
     type: String,
-    enum: ['Hombre', 'Mujer']
+    enum: ['HOMBRE', 'MUJER']
   },
   avatar: {
     type: String,
@@ -36,5 +37,16 @@ const usuarioSchema = new schema({
 mongoose.Types.ObjectId.prototype.valueOf = function () {
   return this.toString();
 };
+
+usuarioSchema.pre("save", function (next) {
+  let user = this;
+  bcrypt.genSalt(10, function (error, salt) {
+    bcrypt.hash(user.password, salt, function (error, hash) {
+      if (error) return next(error);
+      user.password = hash;
+      next();
+    });
+  });
+});
 
 module.exports = usuarioSchema;

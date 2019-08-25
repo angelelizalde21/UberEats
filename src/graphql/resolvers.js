@@ -1,4 +1,4 @@
-import { getUsuario, createUsuario, updateUsuario, deleteUsuario } from "../actions/usuarioAction";
+import { getUsuario, createUsuario, updateUsuario, deleteUsuario, doLoginAction } from "../actions/usuarioAction";
 import { getRepartidor, createRepartidor, updateRepartidor, deleteRepartidor } from '../actions/repartidorAction';
 import { getRestaurante, createRestaurante, updateRestaurante, deleteRestaurante } from '../actions/restauranteAction';
 import { getCategoria, createCategoria, updateCategoria, deleteCategoria } from '../actions/categoriaAction';
@@ -52,6 +52,13 @@ const resolvers = {
   },
   Mutation: {
     // USUARIOS
+    doLogin: async (parent, { email, password }, context, info) => {
+      try {
+        return await doLoginAction(email, password);
+      } catch (error) {
+        return error;
+      }
+    },
     addUsuario: async (parent, args) => await createUsuario(args.data),
     updateUsuario: async (parent, {data, usuarioID}) => {
       try {

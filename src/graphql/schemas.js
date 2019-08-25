@@ -1,13 +1,18 @@
 import { gql } from 'apollo-server';
 
 const typeDefs = gql`
+  directive @AuthDirective on QUERY | FIELD_DEFINITION | FIELD
+
+  type Token {
+    token: String
+  }
  
   type Usuario {
     _id: ID
     nombre: String
     email: String
     password: String
-    genero: String
+    genero: Gender
     avatar: String
     ubicacion: String
     tarjetas: [String]
@@ -18,7 +23,7 @@ const typeDefs = gql`
     nombre: String
     email: String
     password: String
-    genero: String
+    genero: Gender
     avatar: String
     ubicacion: String
   }
@@ -68,7 +73,7 @@ const typeDefs = gql`
     nombre: String
     email: String
     password: String
-    genero: String
+    genero: Gender
     avatar: String
     ubicacion: String
   }
@@ -77,7 +82,7 @@ const typeDefs = gql`
     nombre: String
     email: String
     password: String
-    genero: String
+    genero: Gender
     avatar: String
     ubicacion: String
   }
@@ -116,9 +121,14 @@ const typeDefs = gql`
     platilloID: ID
     cantidad: Float
   }
- 
+
+  enum Gender {
+    HOMBRE
+    MUJER
+  }
+
   type Query {
-    getUsuario: [Usuario]
+    getUsuario: [Usuario] @AuthDirective
     getRepartidor: [Repartidor]
     getRestaurante: [Restaurante]
     getCategoria: [Categoria]
@@ -128,7 +138,8 @@ const typeDefs = gql`
 
 
   type Mutation {
-    addUsuario(data: UsuarioInput) : Usuario
+    doLogin(email: String, password: String) : Token
+    addUsuario(data: UsuarioInput) : Token
     updateUsuario(data: UsuarioInput, usuarioID: ID) : Usuario
     deleteUsuario(usuarioID: ID) : Usuario
     addRepartidor(data: RepartidorInput) : Repartidor
