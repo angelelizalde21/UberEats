@@ -48,7 +48,7 @@ const resolvers = {
       } catch (error) {
         return null;
       }
-    },
+    }
   },
   Mutation: {
     // USUARIOS

@@ -3,6 +3,7 @@ import { gql } from 'apollo-server';
 const typeDefs = gql`
  
   type Usuario {
+    _id: ID
     nombre: String
     email: String
     password: String
@@ -13,6 +14,7 @@ const typeDefs = gql`
   }
 
   type Repartidor {
+    _id: ID
     nombre: String
     email: String
     password: String
