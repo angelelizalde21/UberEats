@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 import { usuarioModel } from '../database/models';
 
@@ -30,11 +31,11 @@ export const createUsuario = async (userData) => {
   } catch (error) {
     return error;
   }
-} 
+}
 
-export const getUsuario = async () => {
+export const getUsuario = async (filtro) => {
   try {
-    return await usuarioModel.find();
+    return await usuarioModel.find(filtro).populate('pedidos');
   } catch (error) {
     return error;
   }
@@ -43,8 +44,8 @@ export const getUsuario = async () => {
 export const doLoginAction = async (email, password) => {
   try {
     const user = await usuarioModel.findOne({ email });
-    const token = createToken(user);
-    return token;
+    if (!user || !bcrypt.compareSync(password, user.password)) { return null }
+    return createToken(user);
   } catch (error) {
     return error;
   }

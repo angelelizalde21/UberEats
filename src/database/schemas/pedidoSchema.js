@@ -3,39 +3,41 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 
-const detalleSchema = new schema({
-  restauranteID: {
+const pedidoSchema = new schema({
+  usuario: {
     type: schema.Types.ObjectId,
     required: true,
+    ref: 'usuarios'
   },
-  platilloID: {
+  repartidor: {
     type: schema.Types.ObjectId,
-    required: true,
-  },
-  cantidad: {
-    type: Number
-  }
-});
-
-const platilloSchema = new schema({
-  usuarioID: {
-    type: schema.Types.ObjectId,
-    required: true,
-  },
-  repartidorID: {
-    type: schema.Types.ObjectId,
-    required: true,
+    ref: 'repartidores'
   },
   total: {
     type: Number,
-    required: true,
+    required: true
   },
-  metodoPago: {
+  estatus: {
     type: String,
     required: true,
-    enum: ['Tarjeta', 'Efectivo'],
+    enum: ['PEDIDO', 'RECOGIDO', 'ENTREGADO']
   },
-  detalle: [detalleSchema]
+  detalle: [{
+    restaurante: {
+      type: schema.Types.ObjectId,
+      required: true,
+      ref: 'restaurantes'
+    },
+    platillo: {
+      type: schema.Types.ObjectId,
+      required: true,
+      ref: 'platillos'
+    },
+    cantidad: {
+      type: Number,
+      require: true
+    }
+  }]
 }, { timestamps: true });
 
 
@@ -43,4 +45,4 @@ mongoose.Types.ObjectId.prototype.valueOf = function () {
   return this.toString();
 };
 
-module.exports = platilloSchema;
+module.exports = pedidoSchema;

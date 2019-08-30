@@ -9,8 +9,11 @@ const categoriaSchema = new schema({
   },
   imagen: {
     type: String,
-    required: false,
   },
+  platillos: [{
+    type: schema.Types.ObjectId,
+    ref: 'platillos'
+  }]
 }, { timestamps: true });
 
 mongoose.Types.ObjectId.prototype.valueOf = function () {

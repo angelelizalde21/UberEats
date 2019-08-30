@@ -22,16 +22,12 @@ const usuarioSchema = new schema({
   },
   avatar: {
     type: String,
-    required: false,
   },
-  ubicacion: {
-    type: String,
-    required: true,
-  },
-  tarjetas:  [{
+  pedidos: [{
     type: schema.Types.ObjectId,
-    ref: 'tarjetas'
+    ref: 'pedidos'
   }]
+
 }, { timestamps: true });
 
 mongoose.Types.ObjectId.prototype.valueOf = function () {

@@ -13,7 +13,6 @@ const restauranteSchema = new schema({
   },
   avatar: {
     type: String,
-    required: false,
   },
   tiempoEspera: {
     type: String,

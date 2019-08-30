@@ -14,8 +14,7 @@ const typeDefs = gql`
     password: String
     genero: Gender
     avatar: String
-    ubicacion: String
-    tarjetas: [String]
+    pedidos: [Pedido]
   }
 
   type Repartidor {
@@ -25,7 +24,8 @@ const typeDefs = gql`
     password: String
     genero: Gender
     avatar: String
-    ubicacion: String
+    estrellas: Int
+    pedidos: [Pedido]
   }
 
   type Restaurante {
@@ -41,85 +41,110 @@ const typeDefs = gql`
     _id: ID
     nombre: String
     imagen: String
+    platillos: [Platillo]
   }
 
   type Platillo {
     _id: ID
-    restauranteID: ID
+    restaurante: Restaurante
     nombre: String
     descripcion: String
     imagen: String
     precio: String
-    categoriaID: ID
+    categoria: Categoria
   }
 
   type Pedido {
     _id: ID
-    usuarioID: ID
-    repartidorID: ID
+    usuario: Usuario
+    repartidor: Repartidor
     total: Float
+    estatus: String
     metodoPago: String
     detalle: [Detalle]
   }
 
   type Detalle {
-    restauranteID: ID
-    platilloID: ID
+    restaurante: Restaurante
+    platillo: Platillo
     cantidad: Int
   }
 
+  type Calificacion {
+    _id: ID
+     repartidor: Repartidor
+     usuario: Usuario
+     comentario: String
+     calificacion: Int
+  }
+
+  type Buzon {
+    _id: ID
+    usuario: Usuario
+    detalle: [Detalle]
+  }
 
   input UsuarioInput {
-    nombre: String
-    email: String
-    password: String
+    nombre: String!
+    email: String!
+    password: String!
     genero: Gender
-    avatar: String
-    ubicacion: String
+    avatar: Upload
   }
 
   input RepartidorInput {
-    nombre: String
-    email: String
-    password: String
+    nombre: String!
+    email: String!
+    password: String!
     genero: Gender
-    avatar: String
-    ubicacion: String
+    avatar: Upload
   }
 
   input RestauranteInput {
-    nombre: String
-    direccion: String
-    avatar: String
-    tiempoEspera: String
+    nombre: String!
+    direccion: String!
+    avatar: Upload
+    tiempoEspera: String!
   }
 
   input CategoriaInput {
-    nombre: String
-    imagen: String
+    nombre: String!
+    imagen: Upload
   }
 
   input PlatilloInput {
-    restauranteID: ID
-    nombre: String
-    descripcion: String
-    imagen: String
-    precio: String
-    categoriaID: ID
+    restaurante: ID!
+    nombre: String!
+    descripcion: String!
+    imagen: Upload
+    precio: Float!
+    categoria: ID!
   }
 
   input PedidoInput {
-    usuarioID: ID
-    repartidorID: ID
-    total: Float
-    metodoPago: String
-    detalle: [DetalleInput]
+    usuario: ID!
+    repartidor: ID
+    total: Float!
+    estatus: Estatus!
+    detalle: [DetalleInput]!
   } 
 
   input DetalleInput {
-    restauranteID: ID
-    platilloID: ID
-    cantidad: Float
+    restaurante: ID!
+    platillo: ID!
+    cantidad: Float!
+  }
+
+  input CalificacionInput {
+    repartidor: ID
+    usuario: ID
+    comentario: String!
+    calificacion: Int
+  }
+
+  input BuzonInput {
+    usuario: ID
+    detalle: [DetalleInput]
   }
 
   enum Gender {
@@ -127,36 +152,51 @@ const typeDefs = gql`
     MUJER
   }
 
+  enum Estatus {
+    PEDIDO
+    RECOGIDO
+    ENTREGADO
+  }
+
+
   type Query {
-    getUsuario: [Usuario] @AuthDirective
-    getRepartidor: [Repartidor]
-    getRestaurante: [Restaurante]
-    getCategoria: [Categoria]
-    getPlatillo: [Platillo]
-    getPedido: [Pedido]
+    getUsuario(data: UsuarioInput): [Usuario] @AuthDirective
+    getRepartidor(data: RepartidorInput): [Repartidor] @AuthDirective
+    getRestaurante(data: RestauranteInput): [Restaurante] @AuthDirective
+    getCategoria(data: CategoriaInput): [Categoria] @AuthDirective
+    getPlatillo(data: PlatilloInput): [Platillo] @AuthDirective
+    getPedido(data: PedidoInput): [Pedido] @AuthDirective
+    getBuzon(data: BuzonInput) : [Buzon] @AuthDirective
+    getLoginUser : Usuario @AuthDirective
   }
 
 
   type Mutation {
-    doLogin(email: String, password: String) : Token
+    doLogin(email: String, password: String) : Token @AuthDirective
     addUsuario(data: UsuarioInput) : Token
-    updateUsuario(data: UsuarioInput, usuarioID: ID) : Usuario
-    deleteUsuario(usuarioID: ID) : Usuario
-    addRepartidor(data: RepartidorInput) : Repartidor
-    updateRepartidor(data: RepartidorInput, repartidorID: ID) : Repartidor
-    deleteRepartidor(repartidorID: ID) : Repartidor
-    addRestaurante(data: RestauranteInput) : Restaurante
-    updateRestaurante(data: RestauranteInput, restauranteID: ID) : Restaurante
-    deleteRestaurante(restauranteID: ID) : Restaurante
-    addCategoria(data: CategoriaInput) : Categoria
-    updateCategoria(data: CategoriaInput, categoriaID: ID) : Categoria
-    deleteCategoria(categoriaID: ID) : Categoria
-    addPlatillo(data: PlatilloInput, restauranteID: ID) : Platillo
-    updatePlatillo(data: PlatilloInput, platilloID: ID) : Platillo
-    deletePlatillo(platilloID: ID) : Platillo
-    addPedido(data: PedidoInput) : Pedido
-    updatePedido(data: PedidoInput, pedidoID: ID) : Pedido
-    deletePedido(pedidoID: ID) : Pedido
+    updateUsuario(data: UsuarioInput, usuarioID: ID) : Usuario @AuthDirective
+    deleteUsuario(usuarioID: ID) : Usuario @AuthDirective
+    addRepartidor(data: RepartidorInput) : Repartidor @AuthDirective
+    updateRepartidor(data: RepartidorInput, repartidorID: ID) : Repartidor @AuthDirective
+    deleteRepartidor(repartidorID: ID) : Repartidor @AuthDirective
+    addRestaurante(data: RestauranteInput) : Restaurante @AuthDirective
+    updateRestaurante(data: RestauranteInput, restauranteID: ID) : Restaurante @AuthDirective
+    deleteRestaurante(restauranteID: ID) : Restaurante @AuthDirective
+    addCategoria(data: CategoriaInput) : Categoria @AuthDirective
+    updateCategoria(data: CategoriaInput, categoriaID: ID) : Categoria @AuthDirective
+    deleteCategoria(categoriaID: ID) : Categoria @AuthDirective
+    addPlatillo(data: PlatilloInput) : Platillo @AuthDirective
+    updatePlatillo(data: PlatilloInput, platilloID: ID) : Platillo @AuthDirective
+    deletePlatillo(platilloID: ID) : Platillo @AuthDirective
+    addPedido(data: PedidoInput) : Pedido @AuthDirective
+    updatePedido(data: PedidoInput, pedidoID: ID) : Pedido @AuthDirective
+    deletePedido(pedidoID: ID) : Pedido @AuthDirective
+    setRepartidorPedido(pedidoID: ID) : Repartidor @AuthDirective
+    setEntregarPedido(pedidoID: ID) : Pedido @AuthDirective
+    setCalificacion(data: CalificacionInput) : Calificacion @AuthDirective
+    addBuzon(data: BuzonInput) : Buzon @AuthDirective
+    updateBuzon(data: BuzonInput) : Buzon @AuthDirective
+    deleteBuzon(usuarioID: ID) : Buzon @AuthDirective
   }
 `;
 

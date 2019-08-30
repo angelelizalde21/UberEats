@@ -4,15 +4,15 @@ export const createCategoria = async (categoriaData) => {
   try {
     return await categoriaModel.create(categoriaData);
   } catch (error) {
-    return  null;
+    return  error;
   }
 } 
 
-export const getCategoria = async () => {
+export const getCategoria = async (filtro) => {
   try {
-    return await categoriaModel.find();
+    return await categoriaModel.find(filtro).populate('platillos');
   } catch (error) {
-    return null;
+    return error;
   }
 }
 
@@ -21,7 +21,7 @@ export const updateCategoria = async (filtro, update) => {
   try {
     return await categoriaModel.findOneAndUpdate(filtro, update, { new: true });
   } catch (error) {
-    return null;
+    return error;
   }
 }
 
@@ -29,6 +29,6 @@ export const deleteCategoria = async (filtro) => {
   try {
     return await categoriaModel.findOneAndDelete(filtro);
   } catch (error) {
-    return null;
+    return error;
   }
 }

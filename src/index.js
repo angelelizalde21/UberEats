@@ -9,13 +9,14 @@ require('dotenv').config();
 
 // Mongoose
 
+const DATABASE  = process.env.NODE_ENV = 'test' ? process.env.TEST_DATABASE : process.env.DATABASE;
 
 mongoose.connect(
-  process.env.DATABASE,
+  DATABASE,
   {
     useCreateIndex: true,
     useNewUrlParser: true,
-    useFindAndModify: false,
+    useFindAndModify: false
   }
 );
 
@@ -35,8 +36,10 @@ const server = new ApolloServer({
     AuthDirective: AuthDirective
   },
   context: async ({ req }) => getContext(req),
+  introspection: true,
+  playground: true,
 });
 
 server.listen({ port: process.env.PORT }).then(({ url }) => {
-  console.log('server is ready at ' + url);
+  console.log('🚀 server is ready at ' + url);
 })

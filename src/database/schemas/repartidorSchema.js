@@ -17,16 +17,19 @@ const repartidorSchema = new schema({
   },
   genero: {
     type: String,
-    enum: ['Hombre', 'Mujer']
+    enum: ['HOMBRE', 'MUJER']
   },
   avatar: {
     type: String,
-    required: false,
   },
-  ubicacion: {
-    type: String,
-    required: true,
-  },
+  pedidos: [{
+    type: schema.Types.ObjectId,
+    ref: 'pedidos'
+  }],
+  calificaciones: [{
+    type: schema.Types.ObjectId,
+    ref: 'calificaciones'
+  }]
 }, { timestamps: true });
 
 mongoose.Types.ObjectId.prototype.valueOf = function () {
