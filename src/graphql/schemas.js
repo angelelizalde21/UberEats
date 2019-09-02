@@ -172,8 +172,8 @@ const typeDefs = gql`
 
 
   type Mutation {
-    doLogin(email: String, password: String) : Token @AuthDirective
-    addUsuario(data: UsuarioInput) : Token
+    doLogin(email: String, password: String) : Token
+    addUsuario(data: UsuarioInput) : Token @AuthDirective
     updateUsuario(data: UsuarioInput, usuarioID: ID) : Usuario @AuthDirective
     deleteUsuario(usuarioID: ID) : Usuario @AuthDirective
     addRepartidor(data: RepartidorInput) : Repartidor @AuthDirective
