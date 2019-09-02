@@ -4,6 +4,7 @@ import {
 } from '../actions/usuarioAction';
 
 const { SchemaDirectiveVisitor, AuthenticationError } = require('apollo-server-express');
+import { SECRET } from '../config/index';
 
 class AuthDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field) {
@@ -23,7 +24,7 @@ const getContext = (req) => {
   try {
     const token = req.headers.authorization;
     if (typeof token === typeof undefined) return req;
-    return JWT.verify(token, process.env.SECRET, async function (err, result) {
+    return JWT.verify(token, SECRET, async function (err, result) {
       if (err) return req;
       try {
         const user = await findUserAction({ _id: result._id });

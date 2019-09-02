@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 const should = require('chai').should();
 
 const request = require('request');

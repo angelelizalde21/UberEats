@@ -5,11 +5,9 @@ import typeDefs from './graphql/schemas';
 import resolvers from './graphql/resolvers';
 import { getContext, AuthDirective } from './actions/authActions';
 
-require('dotenv').config();
+import { DATABASE } from './config/index';
 
 // Mongoose
-
-const DATABASE  = process.env.NODE_ENV = 'test' ? process.env.TEST_DATABASE : process.env.DATABASE;
 
 mongoose.connect(
   DATABASE,
@@ -40,6 +38,6 @@ const server = new ApolloServer({
   playground: true,
 });
 
-server.listen({ port: process.env.PORT }).then(({ url }) => {
+server.listen(process.env.PORT || 8080).then(({ url }) => {
   console.log('🚀 server is ready at ' + url);
 })

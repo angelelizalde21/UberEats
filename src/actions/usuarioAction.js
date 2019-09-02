@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 import { usuarioModel } from '../database/models';
+import { SECRET } from '../config/index';
 
 Date.prototype.addDays = function (days) {
   const date = new Date(this.valueOf());
@@ -18,7 +19,7 @@ const createToken = (userData) => {
     exp,
   }
 
-  const token = jwt.sign(payload, process.env.SECRET);
+  const token = jwt.sign(payload, SECRET);
   return { token }
 }
 
