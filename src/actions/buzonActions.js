@@ -6,7 +6,7 @@ export const getBuzon = async (filtro) => {
       .populate('usuario')
       .populate('detalle.restaurante')
       .populate('detalle.platillo');
-      
+
   } catch (error) {
     return error;
   }
