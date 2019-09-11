@@ -19,7 +19,7 @@ const resolvers = {
         return error;
       }
     },
-    getLoginUser: (parents, { user }) => {
+    getLoginUser: (parents, args, { user }) => {
       try {
         return user;
       } catch (error) {

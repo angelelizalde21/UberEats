@@ -74,7 +74,7 @@ var resolvers = {
 
       return getUsuario;
     }(),
-    getLoginUser: function getLoginUser(parents, _ref2) {
+    getLoginUser: function getLoginUser(parents, args, _ref2) {
       var user = _ref2.user;
 
       try {
