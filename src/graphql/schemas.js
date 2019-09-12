@@ -147,6 +147,11 @@ const typeDefs = gql`
     detalle: [DetalleInput]
   }
 
+  input BuzonUpdateInput {
+    usuario: ID
+    detalle: [DetalleInput]
+  }
+
   enum Gender {
     HOMBRE
     MUJER
@@ -195,7 +200,7 @@ const typeDefs = gql`
     setEntregarPedido(pedidoID: ID) : Pedido @AuthDirective
     setCalificacion(data: CalificacionInput) : Calificacion @AuthDirective
     addBuzon(data: BuzonInput) : Buzon @AuthDirective
-    updateBuzon(data: BuzonInput) : Buzon @AuthDirective
+    updateBuzon(data: BuzonUpdateInput) : Buzon @AuthDirective
     deleteBuzon(usuarioID: ID) : Buzon @AuthDirective
   }
 `;
