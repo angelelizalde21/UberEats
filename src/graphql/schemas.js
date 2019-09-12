@@ -164,6 +164,9 @@ const typeDefs = gql`
     ENTREGADO
   }
 
+  type Subscription {
+    buzonAdded: Buzon
+  }  
 
   type Query {
     getUsuario(data: UsuarioInput): [Usuario] @AuthDirective

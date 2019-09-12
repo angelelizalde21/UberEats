@@ -1,3 +1,5 @@
+import { PubSub } from 'apollo-server';
+
 import { getUsuario, createUsuario, updateUsuario, deleteUsuario, doLoginAction } from "../actions/usuarioAction";
 import { getRepartidor, createRepartidor, updateRepartidor, deleteRepartidor, setRepartidorPedido } from '../actions/repartidorAction';
 import { getRestaurante, createRestaurante, updateRestaurante, deleteRestaurante } from '../actions/restauranteAction';
@@ -9,7 +11,16 @@ import { getBuzon, addBuzon, updateBuzon, deleteBuzon } from '../actions/buzonAc
 
 import { storeUpload } from "../utils/uploader";
 
+
+const pubSub = new PubSub;
+const BUZON_ADDED = 'BUZON_ADDED';
+
 const resolvers = {
+  Subscription: {
+    buzonAdded: {
+      subscribe: (parent, args, context, info) => pubSub.asyncIterator([BUZON_ADDED])
+    },
+  },
   Query: {
     getUsuario: async (parents, { data }) => {
       try {
@@ -323,7 +334,11 @@ const resolvers = {
     // Buzon de pedidos
     addBuzon: async (parent, { data }) => {
       try {
-        return await addBuzon(data);
+        const newBuzon = await addBuzon(data);
+        pubSub.publish(
+          BUZON_ADDED,
+          { buzonAdded: newBuzon });
+        return newBuzon;
       } catch (error) {
         return error;
       }
@@ -332,7 +347,11 @@ const resolvers = {
       try {
         const filtro = { usuario: data.usuario };
         const update = { $set: { detalle: data.detalle } }
-        return await updateBuzon(filtro, update);
+        const newBuzon = await updateBuzon(filtro, update);
+        pubSub.publish(
+          BUZON_ADDED,
+          { buzonAdded: newBuzon });
+        return newBuzon;
       } catch (error) {
         return error;
       }

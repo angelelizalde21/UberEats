@@ -13,6 +13,8 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
+var _apolloServer = require("apollo-server");
+
 var _usuarioAction = require("../actions/usuarioAction");
 
 var _repartidorAction = require("../actions/repartidorAction");
@@ -35,7 +37,16 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
+var pubSub = new _apolloServer.PubSub();
+var BUZON_ADDED = 'BUZON_ADDED';
 var resolvers = {
+  Subscription: {
+    buzonAdded: {
+      subscribe: function subscribe(parent, args, context, info) {
+        return pubSub.asyncIterator([BUZON_ADDED]);
+      }
+    }
+  },
   Query: {
     getUsuario: function () {
       var _getUsuario2 = (0, _asyncToGenerator2["default"])(
@@ -1318,7 +1329,7 @@ var resolvers = {
       var _addBuzon2 = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee30(parent, _ref40) {
-        var data;
+        var data, newBuzon;
         return _regenerator["default"].wrap(function _callee30$(_context30) {
           while (1) {
             switch (_context30.prev = _context30.next) {
@@ -1329,19 +1340,23 @@ var resolvers = {
                 return (0, _buzonActions.addBuzon)(data);
 
               case 4:
-                return _context30.abrupt("return", _context30.sent);
+                newBuzon = _context30.sent;
+                pubSub.publish(BUZON_ADDED, {
+                  buzonAdded: newBuzon
+                });
+                return _context30.abrupt("return", newBuzon);
 
-              case 7:
-                _context30.prev = 7;
+              case 9:
+                _context30.prev = 9;
                 _context30.t0 = _context30["catch"](1);
                 return _context30.abrupt("return", _context30.t0);
 
-              case 10:
+              case 12:
               case "end":
                 return _context30.stop();
             }
           }
-        }, _callee30, null, [[1, 7]]);
+        }, _callee30, null, [[1, 9]]);
       }));
 
       function addBuzon(_x63, _x64) {
@@ -1354,7 +1369,7 @@ var resolvers = {
       var _updateBuzon2 = (0, _asyncToGenerator2["default"])(
       /*#__PURE__*/
       _regenerator["default"].mark(function _callee31(parent, _ref41) {
-        var data, filtro, update;
+        var data, filtro, update, newBuzon;
         return _regenerator["default"].wrap(function _callee31$(_context31) {
           while (1) {
             switch (_context31.prev = _context31.next) {
@@ -1373,19 +1388,23 @@ var resolvers = {
                 return (0, _buzonActions.updateBuzon)(filtro, update);
 
               case 6:
-                return _context31.abrupt("return", _context31.sent);
+                newBuzon = _context31.sent;
+                pubSub.publish(BUZON_ADDED, {
+                  buzonAdded: newBuzon
+                });
+                return _context31.abrupt("return", newBuzon);
 
-              case 9:
-                _context31.prev = 9;
+              case 11:
+                _context31.prev = 11;
                 _context31.t0 = _context31["catch"](1);
                 return _context31.abrupt("return", _context31.t0);
 
-              case 12:
+              case 14:
               case "end":
                 return _context31.stop();
             }
           }
-        }, _callee31, null, [[1, 9]]);
+        }, _callee31, null, [[1, 11]]);
       }));
 
       function updateBuzon(_x65, _x66) {
