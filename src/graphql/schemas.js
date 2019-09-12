@@ -148,6 +148,7 @@ const typeDefs = gql`
   }
 
   input BuzonUpdateInput {
+    _id: ID
     usuario: ID
     detalle: [DetalleInput]
   }
