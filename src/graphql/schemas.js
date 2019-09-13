@@ -129,6 +129,13 @@ const typeDefs = gql`
     detalle: [DetalleInput]!
   } 
 
+  input PedidoBuscarInput {
+    usuario: ID!
+    repartidor: ID
+    total: Float
+    estatus: Estatus
+  } 
+
   input DetalleInput {
     restaurante: ID!
     platillo: ID!
@@ -174,7 +181,7 @@ const typeDefs = gql`
     getRestaurante(data: RestauranteInput): [Restaurante] @AuthDirective
     getCategoria(data: CategoriaInput): [Categoria] @AuthDirective
     getPlatillo(data: PlatilloInput): [Platillo] @AuthDirective
-    getPedido(data: PedidoInput): [Pedido] @AuthDirective
+    getPedido(data: PedidoBuscarInput): [Pedido] @AuthDirective
     getBuzon(data: BuzonInput) : [Buzon] @AuthDirective
     getLoginUser : Usuario @AuthDirective
   }
