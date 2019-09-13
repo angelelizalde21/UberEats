@@ -61,6 +61,7 @@ const typeDefs = gql`
     total: Float
     estatus: String
     metodoPago: String
+    createdAt: String
     detalle: [Detalle]
   }
 
